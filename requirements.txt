@@ -1,0 +1,23 @@
+# Core data manipulation
+pandas>=2.0.0
+numpy>=1.24.0
+openpyxl>=3.1.0
+
+# API and web requests
+requests>=2.31.0
+urllib3>=2.0.0
+
+# Specific data source libraries
+comtradeapicall>=1.0.0
+wbgapi>=1.0.12
+pandasdmx>=1.9.0
+
+# Network analysis
+networkx>=3.1
+
+# Data validation and utilities
+python-dotenv>=1.0.0
+tqdm>=4.65.0
+
+# Optional: for advanced IO table processing
+scipy>=1.11.0
