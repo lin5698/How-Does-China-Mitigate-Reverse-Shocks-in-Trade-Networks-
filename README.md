@@ -92,3 +92,78 @@ The network scripts use `NetworkX` to calculate:
 - **PageRank**: Economic influence
 - **Community Detection**: Trade blocs
 - **GVC Position**: Upstream vs. Downstream integration
+
+
+## 🧠 Network-TVP-VAR + Counterfactual Model (RCEP Reverse-Shock Resilience)
+
+This repo now includes an executable research script: `16_network_tvp_var_counterfactual.py`.
+
+It operationalizes the methodology in the paper draft:
+- Quarterly VAX proxy construction with annual benchmarking
+- Rolling network matrix construction (`W_t`) with smoothing
+- Country-level time-varying coefficients (`a_own`, `b_net`) via rolling ridge estimation
+- Low-rank compression for network coefficients (CP-style approximation)
+- Counterfactual decomposition (`Total` vs `Direct`, with `B=0`) and amplification share
+- Rolling forecast evaluation (`h=1`, `h=4`) vs AR(1)/no-network baselines
+
+Run:
+
+```bash
+python 16_network_tvp_var_counterfactual.py
+```
+
+Outputs are saved to `data/model_outputs/`:
+- `tvp_country_coefficients.csv`
+- `cp_compressed_network_coefficients.csv`
+- `counterfactual_amplification_panel.csv`
+- `rolling_forecast_evaluation.csv`
+- `model_run_summary.json`
+
+
+## 🧩 Step 0 Quarterly Panel Alignment (2000Q1–2023Q4)
+
+Use `00_quarterly_alignment.py` to enforce a unified quarter index and country coding for all RCEP members.
+
+```bash
+python 00_quarterly_alignment.py
+```
+
+What it does:
+- builds a master quarter index (`2000Q1`–`2023Q4`)
+- aligns macro panel to `15 countries × 96 quarters`
+- aligns bilateral panel to `15 × 15 country-pairs × 96 quarters`
+- applies fixed frequency-conversion rules (monthly flow=sum, index=mean, eop=quarter-end) via reusable helper functions
+- exports missingness matrices and a breakpoint-log template for documentation
+
+Output directory: `data/alignment/`
+- `quarter_master_index.csv`
+- `rcep_macro_aligned_2000Q1_2023Q4.csv`
+- `rcep_bilateral_aligned_2000Q1_2023Q4.csv`
+- `macro_missing_matrix.csv`
+- `bilateral_missing_matrix.csv`
+- `alignment_validation_report.csv`
+- `breakpoint_log_template.csv`
+
+
+## 📄 Main Text Figures & Tables (Figure 1-3, Table 1-2 + Appendix A1-A6)
+
+Generate manuscript-ready artifacts with:
+
+```bash
+python 17_generate_paper_figures_tables.py
+```
+
+Output directory: `data/paper_outputs/`
+- Main text:
+  - `Figure1_tariff_path.svg`
+  - `Figure2_amplification_timeseries.svg`
+  - `Figure3_absorber_pre_post_top10.svg`
+  - `table1_baseline_fe.csv`
+  - `table2_rolling_cv.csv`
+- Appendix support (CSV + chart):
+  - `A1_indicator_alternatives.csv` + `A1_indicator_alternatives.svg`
+  - `A2_W_sensitivity.csv` + `A2_W_sensitivity.svg`
+  - `A3_rank_lag_robustness.csv` + `A3_rank_lag_robustness.svg`
+  - `A4_placebo_dates.csv` + `A4_placebo_dates.svg`
+  - `A5_crisis_exclusion.csv` + `A5_crisis_exclusion.svg`
+  - `A6_tvp_girf_surface_data.csv` + `A6_tvp_girf_surface_heatmap.svg`
