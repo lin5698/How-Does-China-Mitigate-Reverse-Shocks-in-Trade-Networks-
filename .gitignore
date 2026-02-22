@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+data/model_outputs/
+data/alignment/
+data/paper_outputs/
